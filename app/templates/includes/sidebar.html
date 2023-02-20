@@ -1,0 +1,79 @@
+<div class="sidebar" data-color="white" data-active-color="danger">
+    <div class="logo">
+      <a target="_blank" rel="sponsored noopener noreferrer"
+         class="simple-text logo-mini">
+        <div class="logo-image-small">
+          <img src="/static/assets/img/centrosur.jpg">
+        </div>
+        <!-- <p>CT</p> -->
+      </a>
+      <a target="_blank" rel="sponsored noopener noreferrer" 
+         class="simple-text logo-normal">
+        Centro Sur
+        <!-- <div class="logo-image-big">
+          <img src="/static/assets/img/logo-big.png">
+        </div> -->
+      </a>
+    </div>
+    <div class="sidebar-wrapper">
+      <ul class="nav">
+        <li class="{% if 'index' in segment %} active {% endif %}">
+          <a href="/index.html">
+            <i class="nc-icon nc-bank"></i>
+            <p>Inicio</p>
+          </a>
+        </li>
+        <li class="{% if 'usuario' in segment %} active {% endif %}">
+          <a href="/usuario.html">
+            <i class="nc-icon nc-circle-10"></i>
+            <p>Usuario</p>
+          </a>
+        </li>
+        <li class="{% if 'asistenteadmin' in segment %} active {% endif %}">
+          <a href="/asistenteadmin.html">
+            <i class="nc-icon nc-circle-10"></i>
+            <p>Asistente Admin</p>
+          </a>
+        </li>
+        <li class="{% if 'asistentejefe' in segment %} active {% endif %}">
+          <a href="/asistentejefe.html">
+            <i class="nc-icon nc-circle-10"></i>
+            <p>Asistente Jefe</p>
+          </a>
+        </li>
+        <li class="{% if 'gruporevisor' in segment %} active {% endif %}">
+          <a href="/gruporevisor.html">
+            <i class="nc-icon nc-circle-10"></i>
+            <p>Grupo Revisor</p>
+          </a>
+        </li>
+        <li class="{% if 'revisor' in segment %} active {% endif %}">
+          <a href="/revisor.html">
+            <i class="nc-icon nc-circle-10"></i>
+            <p>Revisor</p>
+          </a>
+        </li>
+        <li class="{% if 'administracion' in segment %} active {% endif %}">
+          <a href="/administracion.html">
+            <i class="nc-icon nc-settings-gear-65"></i>
+            <p>Catastros</p>
+          </a>
+        </li>
+        <li class="{% if 'orden' in segment %} active {% endif %}">
+          <a href="/orden.html">
+            <i class="nc-icon nc-single-copy-04"></i>
+            <p>Orden</p>
+          </a>
+        </li>
+        <li class="{% if 'administrarorden' in segment %} active {% endif %}">
+          <a href="/administrarorden.html">
+            <i class="nc-icon nc-settings"></i>
+            <p>Administrar orden</p>
+          </a>
+        </li>
+
+
+      </ul>
+    </div>
+  </div>
+

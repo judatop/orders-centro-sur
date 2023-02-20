@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="1">
+        <Schema name="Coordenadas" id="2">
+            <SimpleField type="string" name="Name"/>
+            <SimpleField type="string" name="Description"/>
+            <SimpleField type="float" name="Coord. X (UTM)"/>
+            <SimpleField type="float" name="Coord. Y (UTM)"/>
+        </Schema>
+        <Folder id="7">
+            <name>Coordenadas</name>
+        </Folder>
+    </Document>
+</kml>

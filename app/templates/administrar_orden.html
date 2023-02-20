@@ -1,0 +1,2068 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .ocultar-boton {
+    display: none;
+  }
+
+  .centrar-boton{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+
+  {% if category == "exito" %}
+  <div class="alert alert-success alert-dismissible fade show">
+    <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+      <i class="nc-icon nc-simple-remove"></i>
+    </button>
+    <span><b>Correcto: </b>{{ message }}</span>
+  </div>
+  {% endif %}
+
+  {% if category == "error" %}
+  <div class="alert alert-danger alert-dismissible fade show">
+    <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+      <i class="nc-icon nc-simple-remove"></i>
+    </button>
+    <span><b>Error: </b>{{ message }}</span>
+  </div>
+  {% endif %}
+
+  {% if category == "advertencia" %}
+  <div class="alert alert-warning alert-dismissible fade show">
+    <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+      <i class="nc-icon nc-simple-remove"></i>
+    </button>
+    <span><b>Advertencia: </b> {{ message }}</span>
+  </div>
+  {% endif %}
+
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+  <div class="row">
+    <div class="col-md-12">
+      <center>
+        <button class="btn btn-round btn-success" onclick="activarBoton('guardar')">Guardar</button>
+        <button class="btn btn-round" onclick="activarDialog('dialogCancelar')">Cancelar y Regresar</button>
+        <button class="btn btn-round btn-danger" onclick="activarDialog('dialogRevision')">Enviar a revisión</button>
+        <button class="btn  btn-round btn-danger" onclick="activarDialog('dialogCerrarSAP')">Cerrar en SAP</button>
+    </center>
+    </div>
+  </div>
+
+  <hr style="border-top: 3px solid #bbb;">
+
+  <div class="row" id="divMenu" style="display:block">
+    <ul class="tabs">
+      <button class="btn" onclick="activarDiv('divOrden')">Orden</button>
+      <button class="btn" onclick="activarDiv('divInstalacion')">Instalación</button>
+      <button class="btn" onclick="activarDiv('divCliente')">Cliente</button>
+      <button class="btn" onclick="activarDiv('divMedidor')">Medidor</button>
+      <button class="btn" onclick="activarDiv('divParametrizacion')">Parametrización</button>
+      <button class="btn" onclick="activarDiv('divTransformadorMedida')">Transformadores de Medida</button>
+      <button class="btn" onclick="activarDiv('divTransformadorDistribucion')">Transformadores de Distribución</button>
+      <button class="btn" onclick="activarDiv('divPruebas')">Pruebas</button>
+      <button class="btn" onclick="activarDivs(['divParametrizacion', 'divVerificaciones'])">Verificaciones</button>
+      <button class="btn" onclick="activarDiv('divSellos')">Sellos</button>
+      <button class="btn" onclick="activarDiv('divFotografias')">Fotografias</button>
+      <button class="btn" onclick="activarDiv('divLecturas')">Lecturas</button>
+      <button class="btn" onclick="activarDiv('divPerfilesDeCarga')">Perfil de carga</button>
+      <button class="btn" onclick="activarDiv('divResultados')">Resultados</button>
+      <button class="btn" onclick="activarDiv('divRDICO5')">RDICO5</button>
+    </ul>
+  </div>
+
+  <form method="post">
+    {{ params[0].hidden_tag() }}
+
+    {{ params[0].guardar(class_="ocultar-boton") }}
+
+    <div class="row" id="divOrden" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Orden</h5>
+          </div>
+          <div class="card-body">
+
+
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].numero_orden.label }}
+                  {{ params[0].numero_orden(class_='form-control') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].estado_orden.label }}
+                  {{ params[0].estado_orden(class_='form-control') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].comentario_inicial_orden.label }}
+                  {{ params[0].comentario_inicial_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divInstalacion" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Instalación</h5>
+          </div>
+          <div class="card-body">
+
+
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].numero_instalacion_orden.label }}
+                  {{ params[0].numero_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].coordenada_x_instalacion_orden.label }}
+                  {{ params[0].coordenada_x_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].coordenada_y_instalacion_orden.label }}
+                  {{ params[0].coordenada_y_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].utm_x_instalacion_orden.label }}
+                  {{ params[0].utm_x_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].utm_y_instalacion_orden.label }}
+                  {{ params[0].utm_y_instalacion_orden(class_='form-control') }}
+                </div>
+              </div> 
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].actualizar_coordenadas_instalacion_orden }}
+                  {{ params[0].actualizar_coordenadas_instalacion_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].numero_poste_instalacion_orden.label }}
+                  {{ params[0].numero_poste_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  <h6>Contacto técnico</h6>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].nombre_contacto_instalacion_orden.label }}
+                  {{ params[0].nombre_contacto_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].telefono_contacto_instalacion_orden.label }}
+                  {{ params[0].telefono_contacto_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].correo_contacto_instalacion_orden.label }}
+                  {{ params[0].correo_contacto_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].cargo_contacto_instalacion_orden.label }}
+                  {{ params[0].cargo_contacto_instalacion_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+
+            <a href="{{ url_for('ubicacionorden', numero_orden=params[0].numero_orden.data)}}" target="_blank"><i>Ubicación</i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divCliente" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Cliente</h5>
+          </div>
+          <div class="card-body">
+
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].identificacion_cliente_orden.label }}
+                  {{ params[0].identificacion_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-5 pr-1">
+                <div class="form-group">
+                  {{ params[0].razon_social_cliente_orden.label }}
+                  {{ params[0].razon_social_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  {{ params[0].cuenta_cliente_orden.label }}
+                  {{ params[0].cuenta_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].tipo_tarifa_cliente_orden.label }}
+                  {{ params[0].tipo_tarifa_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].correo_cliente_orden.label }}
+                  {{ params[0].correo_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].telefono_cliente_orden.label }}
+                  {{ params[0].telefono_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-5 pr-1">
+                <div class="form-group">
+                  {{ params[0].direccion_cliente_orden.label }}
+                  {{ params[0].direccion_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].dmin_kw_cliente_orden.label }}
+                  {{ params[0].dmin_kw_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].dmax_kw_cliente_orden.label }}
+                  {{ params[0].dmax_kw_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].fp_cliente_orden.label }}
+                  {{ params[0].fp_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].mru_cliente_orden.label }}
+                  {{ params[0].mru_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].fm_cliente_orden.label }}
+                  {{ params[0].fm_cliente_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divMedidor" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Medidor</h5>
+          </div>
+          <div class="card-body">
+
+
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].cc_medidor_orden.label }}
+                  {{ params[0].cc_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].numero_medidor_orden.label }}
+                  {{ params[0].numero_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].consumo_kwh_medidor_orden.label }}
+                  {{ params[0].consumo_kwh_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].marca_medidor_orden.label }}
+                  {{ params[0].marca_medidor_orden(class_='form-control',**{"onchange": "cambiar_choices_medidor()" }) }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].tipo_medidor_orden.label }}
+                  {{ params[0].tipo_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].ano_medidor_orden.label }}
+                  {{ params[0].ano_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].exactitud_medidor_orden.label }}
+                  {{ params[0].exactitud_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].corriente_medidor_orden.label }}
+                  {{ params[0].corriente_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].voltaje_medidor_orden.label }}
+                  {{ params[0].voltaje_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].constantek_medidor_orden.label }}
+                  {{ params[0].constantek_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].tipo_medicion_medidor_orden.label }}
+                  {{ params[0].tipo_medicion_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].conexion_medidor_orden.label }}
+                  {{ params[0].conexion_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  <h6>Compensación de perdidas</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-1 pr-1">
+              <div class="form-group">
+              </div>
+            </div>
+            <div class="col-md-2 pr-1">
+              <div class="form-group">
+                {{ params[0].disponible_compensacion_medidor_orden }}
+                {{ params[0].disponible_compensacion_medidor_orden.label }}
+              </div>
+            </div>
+            <div class="col-md-2 pr-1">
+              <div class="form-group">
+                {{ params[0].parametrizado_compensacion_medidor_orden }}
+                {{ params[0].parametrizado_compensacion_medidor_orden.label }}
+              </div>
+            </div>
+          </div>
+          <br><br>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divParametrizacion" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Parametrización</h5>
+          </div>
+          <div class="card-body">
+
+
+            <div class="row">
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].tcs_parametrizacion_orden.label }}
+                  {{ params[0].tcs_parametrizacion_orden(class_='form-control') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].tps_parametrizacion_orden.label }}
+                  {{ params[0].tps_parametrizacion_orden(class_='form-control') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].multiplicador_parametrizacion_orden.label }}
+                  {{ params[0].multiplicador_parametrizacion_orden(class_='form-control') }}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].compensacion_perdidas_parametrizacion_orden.label }}
+                  {{ params[0].compensacion_perdidas_parametrizacion_orden(class_='form-control') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].registros_parametrizacion_orden.label }}
+                  {{ params[0].registros_parametrizacion_orden(class_='form-control') }}
+                </div>
+              </div>
+
+            </div>
+            <br><br>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" id="divTransformadorMedida" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Transformadores de medida</h5>
+          </div>
+          <div class="card-body">
+
+            <div class="table-responsive">
+              <table id="data" class="table">
+                <thead class=" text-primary">
+                  <th class="text-center">
+                    # Serie
+                  </th>
+                  <th class="text-center">
+                    # Empresa
+                  </th>
+                  <th class="text-center">
+                    Marca
+                  </th>
+                  <th class="text-center">
+                    Relación
+                  </th>
+                  <th class="text-center">
+                    Burden
+                  </th>
+                  <th class="text-center">
+                    Exactitud
+                  </th>
+                  <th class="text-center">
+                    Año
+                  </th>
+                  <th class="text-center">
+                    Sellos
+                  </th>
+                  <th class="text-center">
+                    Tipo
+                  </th>
+                </thead>
+                <tbody>
+                  {% for transformador_medida in params[0].lista_transformadores_medida_orden %}
+                  <tr>
+                    <td class="text-center">{{ transformador_medida.numeroDeSerie }}</td>
+                    <td class="text-center">{{ transformador_medida.numeroDeEmpresa }}</td>
+                    <td class="text-center">{{ transformador_medida.marca }}</td>
+                    <td class="text-center">{{ transformador_medida.relacionDeTransformacion }}</td>
+                    <td class="text-center">{{ transformador_medida.burden }}</td>
+                    <td class="text-center">{{ transformador_medida.exactitud }}</td>
+                    <td class="text-center">{{ transformador_medida.ano }}</td>
+                    <td class="text-center">{{ transformador_medida.sellosEncontrados }}</td>
+                    <td class="text-center">{{ transformador_medida.tipo }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <br><br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" id="divTransformadorDistribucion" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Transformadores de distribución</h5>
+          </div>
+
+          <div class="card-body">
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th class="text-center">
+                    Número
+                  </th>
+                  <th class="text-center">
+                    Marca
+                  </th>
+                  <th class="text-center">
+                    Tipo
+                  </th>
+                  <th class="text-center">
+                    S [kVA]
+                  </th>
+                  <th class="text-center">
+                    [V]
+                  </th>
+                  <th class="text-center">
+                    Año
+                  </th>
+                  <th class="text-center">
+                    Zcc
+                  </th>
+                  <th class="text-center">
+                    Conexión
+                  </th>
+                </thead>
+                <tbody>
+                  {% for transformador_distribucion in params[0].lista_transformadores_distribucion_orden %}
+                  <tr>
+                    <td class="text-center">{{ transformador_distribucion.numero }}</td>
+                    <td class="text-center">{{ transformador_distribucion.marca }}</td>
+                    <td class="text-center">{{ transformador_distribucion.tipo }}</td>
+                    <td class="text-center">{{ transformador_distribucion.capacidadMaxima }}</td>
+                    <td class="text-center">{{ transformador_distribucion.voltaje }}</td>
+                    <td class="text-center">{{ transformador_distribucion.ano }}</td>
+                    <td class="text-center">{{ transformador_distribucion.zcc }}</td>
+                    <td class="text-center">{{ transformador_distribucion.conexion }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <br><br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divPruebas" style="display: none">
+      <div class="col-md-12">
+
+        <div class="card card-user">
+
+          <div class="card-header">
+            <h5 class="card-title">Pruebas</h5>
+          </div>
+
+          <div class="card-body">
+
+            <div class="table-responsive">
+              
+                <table class="table">
+                  <thead class=" text-primary">
+                    <th class="text-center">
+                      UNIDAD ELÉCTRICA
+                    </th>
+                    <th class="text-center">
+                      R (FASE 1)
+                    </th>
+                    <th class="text-center">
+                      S (FASE 2)
+                    </th>
+                    <th class="text-center">
+                      T (FASE 3)
+                    </th>
+                    <th class="text-center">
+                      P[KW]TOTAL
+                    </th>
+                    <th class="text-center">
+                      NO. REVOL/IMPULS
+                    </th>
+                    <th class="text-center">
+                      TIEMPO
+                    </th>
+                    <th class="text-center">
+                      P [KW] MEDIDOR
+                    </th>
+                    <th class="text-center">
+                      ERROR %
+                    </th>
+                  </thead>
+                  <tbody>
+                    {% for prueba in params[0].lista_pruebas_orden %}
+                      <tr>
+                        <td class="text-center">{{ prueba.unidadElectrica }}</td>
+                        <td class="text-center">{{ '%0.3f' % prueba.rfase1|float }}</td>
+                        <td class="text-center">{{ '%0.3f' % prueba.sfase2|float }}</td>
+                        <td class="text-center">{{ '%0.3f' % prueba.tfase3|float }}</td>
+                        <td class="text-center">{{ '%0.3f' % prueba.potencia_total|float }}</td>
+                        <td class="text-center">{{ '%0.3f' % prueba.revoluciones|float }}</td>
+                        <td class="text-center">{{ '%0.3f' % prueba.tiempo|float }}</td>
+                        {% if  prueba.pkw_medidor > 0 %}
+                            <td class="text-center">{{'%0.3f' % prueba.pkw_medidor|float}}</td>
+                        {% else %}
+                          <td class="text-center">Sin cálculo</td>
+                        {% endif %}
+
+                        {% if  prueba.error > 0 %}
+                            <td class="text-center">{{'%0.3f' % prueba.error|float}}</td>
+                        {% else %}
+                          <td class="text-center">Sin cálculo</td>
+                        {% endif %}
+                      </tr>   
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    {% if params[0].lista_pruebas_orden|length > 0 %}
+                      <td class="text-center"><b>Promedio</b></td>
+                      {% set promedio1 = params[0].lista_pruebas_orden | sum(attribute='rfase1') / params[0].lista_pruebas_orden | count %}
+                      {% set promedio2 = params[0].lista_pruebas_orden | sum(attribute='sfase2') / params[0].lista_pruebas_orden | count %}
+                      {% set promedio3 = params[0].lista_pruebas_orden | sum(attribute='tfase3') / params[0].lista_pruebas_orden | count %}
+                      {% set promedio4 = params[0].lista_pruebas_orden | sum(attribute='potencia_total') / params[0].lista_pruebas_orden | count %}
+                      {% set promedio5 = params[0].lista_pruebas_orden | sum(attribute='error') / params[0].lista_pruebas_orden | count %}
+                      <td class="text-center">{{'%0.3f' % promedio1|float}}</td>
+                      <td class="text-center">{{'%0.3f' % promedio2|float}}</td>
+                      <td class="text-center">{{'%0.3f' % promedio3|float}}</td>
+                      <td class="text-center">{{'%0.3f' % promedio4|float}}</td>
+                      <td class="text-center"></td>
+                      <td class="text-center"></td>
+                      <td class="text-center"></td>
+                      <td class="text-center"></td>
+                      {% endif %}
+                  </tfoot>
+                </table>
+            </div>
+
+            <br>
+            <hr style="border-top: 3px solid #bbb;">
+            <br>
+
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].factor_potencia_medidor_orden.label }}
+                  {{ params[0].factor_potencia_medidor_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-chart">
+              <div class="card-header">
+                <h5 class="card-title">Historial de consumos</h5>
+              </div>
+              <div class="card-body">
+                <canvas id="chart_consumos" width="400" height="100"></canvas>
+              </div>
+            </div>
+
+            <div class="card card-chart">
+              <div class="card-header">
+                <h5 class="card-title">Historial de demandas</h5>
+              </div>
+              <div class="card-body">
+                <canvas id="chart_demandas" width="400" height="100"></canvas>
+              </div>
+            </div>
+
+            <div class="card card-chart">
+              <div class="card-header">
+                <h5 class="card-title">Histórico de reactivos</h5>
+              </div>
+              <div class="card-body">
+                <canvas id="chart_reactivos" width="400" height="100"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" id="divVerificaciones" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Verificaciones</h5>
+          </div>
+
+
+          <div class="card-body">
+
+            <div class="table-responsive">
+
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+
+                  </th>
+                  <th class="text-center">
+                    I prim. R
+                  </th>
+                  <th class="text-center">
+                    I sec. R
+                  </th>
+                  <th class="text-center">
+                    I prim. S
+                  </th>
+                  <th class="text-center">
+                    I sec. S
+                  </th>
+                  <th class="text-center">
+                    I prim. T
+                  </th>
+                  <th class="text-center">
+                    I sec. T
+                  </th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      TC´S
+                    </td>
+                    <td>
+                      {{ params[0].tcs_i_primario_r_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tcs_R()", "onkeyup": "actualizar_relacion_transformacion_tcs_R()", "onpaste": "actualizar_relacion_transformacion_tcs_R()", "oninput": "actualizar_relacion_transformacion_tcs_R()"}) }}
+                    </td>
+                    <td>
+                      {{ params[0].tcs_i_secundario_r_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tcs_R()", "onkeyup": "actualizar_relacion_transformacion_tcs_R()", "onpaste": "actualizar_relacion_transformacion_tcs_R()", "oninput": "actualizar_relacion_transformacion_tcs_R()"}) }}
+                    </td>
+                    <td>
+                      {{ params[0].tcs_i_primario_s_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tcs_S()", "onkeyup": "actualizar_relacion_transformacion_tcs_S()", "onpaste": "actualizar_relacion_transformacion_tcs_S()", "oninput": "actualizar_relacion_transformacion_tcs_S()"}) }}
+                    </td>
+                    <td>
+                      {{ params[0].tcs_i_secundario_s_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tcs_S()", "onkeyup": "actualizar_relacion_transformacion_tcs_S()", "onpaste": "actualizar_relacion_transformacion_tcs_S()", "oninput": "actualizar_relacion_transformacion_tcs_S()"}) }}
+                    </td>
+                    <td>
+                      {{ params[0].tcs_i_primario_t_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tcs_T()", "onkeyup": "actualizar_relacion_transformacion_tcs_T()", "onpaste": "actualizar_relacion_transformacion_tcs_T()", "oninput": "actualizar_relacion_transformacion_tcs_T()"}) }}
+                    </td>
+                    <td>
+                      {{ params[0].tcs_i_secundario_t_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tcs_T()", "onkeyup": "actualizar_relacion_transformacion_tcs_T()", "onpaste": "actualizar_relacion_transformacion_tcs_T()", "oninput": "actualizar_relacion_transformacion_tcs_T()"}) }}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Rel-Trans
+                    </td>
+                    <td colspan="2">
+                      {{ params[0].relacion_transformacion_i_r_verificaciones_orden(class_='form-control') }}
+                    </td>
+                    <td colspan="2">
+                      {{ params[0].relacion_transformacion_i_s_verificaciones_orden(class_='form-control') }}
+                    </td>
+                    <td colspan="2">
+                      {{ params[0].relacion_transformacion_i_t_verificaciones_orden(class_='form-control') }}
+                    </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <br>
+            <hr style="border-top: 3px solid #bbb;">
+            <br>
+
+            <div class="table-responsive">
+
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+
+                  </th>
+                  <th class="text-center">
+                    V prim. R
+                  </th>
+                  <th class="text-center">
+                    V sec. R
+                  </th>
+                  <th class="text-center">
+                    V prim. S
+                  </th>
+                  <th class="text-center">
+                    V sec. S
+                  </th>
+                  <th class="text-center">
+                    V prim. T
+                  </th>
+                  <th class="text-center">
+                    V sec. T
+                  </th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      TP´S
+                    </td>
+                    <td>
+                      {{ params[0].tps_v_primario_r_verificaciones_orden(class_='form-control') }}
+                    </td>
+                    <td>
+                      {{ params[0].tps_v_secundario_r_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tps_R()", "onkeyup": "actualizar_relacion_transformacion_tps_R()", "onpaste": "actualizar_relacion_transformacion_tps_R()", "oninput": "actualizar_relacion_transformacion_tps_R()"}) }}
+                    </td>
+                    <td>
+                      {{ params[0].tps_v_primario_s_verificaciones_orden(class_='form-control') }}
+                    </td>
+                    <td>
+                      {{ params[0].tps_v_secundario_s_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tps_S()", "onkeyup": "actualizar_relacion_transformacion_tps_S()", "onpaste": "actualizar_relacion_transformacion_tps_S()", "oninput": "actualizar_relacion_transformacion_tps_S()"}) }}
+                    </td>
+                    <td>
+                      {{ params[0].tps_v_primario_t_verificaciones_orden(class_='form-control') }}
+                    </td>
+                    <td>
+                      {{ params[0].tps_v_secundario_t_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tps_T()", "onkeyup": "actualizar_relacion_transformacion_tps_T()", "onpaste": "actualizar_relacion_transformacion_tps_T()", "oninput": "actualizar_relacion_transformacion_tps_T()"}) }}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Rel-Trans
+                    </td>
+                    <td colspan="2">
+                      {{ params[0].relacion_transformacion_v_r_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tps_R()", "onkeyup": "actualizar_relacion_transformacion_tps_R()", "onpaste": "actualizar_relacion_transformacion_tps_R()", "oninput": "actualizar_relacion_transformacion_tps_R()"}) }}
+                    </td>
+                    <td colspan="2">
+                      {{ params[0].relacion_transformacion_v_s_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tps_S()", "onkeyup": "actualizar_relacion_transformacion_tps_S()", "onpaste": "actualizar_relacion_transformacion_tps_S()", "oninput": "actualizar_relacion_transformacion_tps_S()"}) }}
+                    </td>
+                    <td colspan="2">
+                      {{ params[0].relacion_transformacion_v_t_verificaciones_orden(class_='form-control', **{"onchange": "actualizar_relacion_transformacion_tps_T()", "onkeyup": "actualizar_relacion_transformacion_tps_T()", "onpaste": "actualizar_relacion_transformacion_tps_T()", "oninput": "actualizar_relacion_transformacion_tps_T()"}) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divSellos" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Sellos</h5>
+          </div>
+          <div class="card-body">
+
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th class="text-center">
+                    MODELO
+                  </th>
+                  <th class="text-center">
+                    SELLO
+                  </th>
+                  <th class="text-center">
+                    TIPO
+                  </th>
+                  <th class="text-center">
+                    UBICACIÓN
+                  </th>
+                  <th class="text-center">
+                    ESTADO
+                  </th>
+                </thead>
+                <tbody>
+                  {% for sello in params[0].lista_sellos_orden %}
+                      <tr>
+                        <td class="text-center">{{ sello.modelo }}</td>
+                        <td class="text-center">{{ sello.sello }}</td>
+                        <td class="text-center">{{ sello.tipo }}</td>
+                        <td class="text-center">{{ sello.ubicacion }}</td>
+                        <td class="text-center">{{ sello.estado }}</td>
+                      </tr>   
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divResultados" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Resultados</h5>
+          </div>
+          <div class="card-body">
+
+
+            <div class="row">
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  <label>Resultados de la verificación</label>
+                  {{ params[0].resultado_verificacion_resultados_orden.label }}
+                  {{ params[0].resultado_verificacion_resultados_orden(class_='form-control') }}
+                </div>
+              </div>
+
+            </div>
+
+            <br><br>
+
+            <div class="row">
+              <div class="col-md-12 pr-1">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th class="text-center">
+                        Descripción
+                      </th>
+                    </thead>
+                    <tbody>
+                      {% for uso_energia in params[0].lista_usos_energia_orden %}
+                          <tr>
+                            <td class="text-center">{{ uso_energia.descripcion }}</td>
+                          </tr>   
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div>
+
+            <br><br>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].anomalia_encontrada_resultados_orden.label }}
+                  {{ params[0].anomalia_encontrada_resultados_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                  {{ params[0].anadir_anomalia_encontrada_resultados_orden(class_='centrar-boton') }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 pr-1">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th class="text-center">Descripción</th>
+                    </thead>
+                    <tbody>
+                      {% for anomalia in params[0].lista_anomalias_orden %}
+                          <tr>
+                            <td class="text-center">{{ anomalia.descripcion }}</td>
+                          </tr>   
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <br><br>
+
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].nuevo_tipo_tarifa_resultados_orden.label }}
+                  {{ params[0].nuevo_tipo_tarifa_resultados_orden(class_='form-control') }}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  {{ params[0].observaciones_resultados_orden.label }}
+                  {{ params[0].observaciones_resultados_orden(class_='form-control') }}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-8 pr-1">
+                <div class="form-group">
+                  {{ params[0].grupo_revisor_resultados_orden.label }}
+                  {{ params[0].grupo_revisor_resultados_orden(class_='form-control') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  <label>Fecha</label><br>
+                  <input id="fecha_resultados_orden" type="date" name="fecha_resultados_orden" class="form-control" disabled>
+                </div>
+              </div>
+
+            </div>
+            {{ params[0].boton_eliminar_anomalias_orden(class_='ocultar-boton') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" id="divFotografias" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Fotografías</h5>
+          </div>
+          <div class="card-body">
+            {{ params[0].archivo_fotografias_fotografia_orden(class_='btn') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divLecturas" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Lecturas</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                {{ params[0].archivo_lectura_lecturas_orden(class_='btn') }}
+              </div>
+            </div>
+            <br><br>
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th class="text-center">
+                    A HORARIAS
+                  </th>
+                  <th class="text-center">
+                    B HORARIAS
+                  </th>
+                  <th class="text-center">
+                    C HORARIAS
+                  </th>
+                  <th class="text-center">
+                    D HORARIAS
+                  </th>
+                  <th class="text-center">
+                    A DEMANDAS
+                  </th>
+                  <th class="text-center">
+                    B DEMANDAS
+                  </th>
+                  <th class="text-center">
+                    C DEMANDAS
+                  </th>
+                  <th class="text-center">
+                    D DEMANDAS
+                  </th>
+                  <th class="text-center">
+                    KVARH
+                  </th>
+                  <th class="text-center">
+                    MODELO
+                  </th>
+
+                </thead>
+                <tbody>
+                  {% for lectura in params[0].lista_lecturas_totales_orden %}
+                      <tr>
+                        <td class="text-center">{{ lectura.a_horarias }}</td>
+                        <td class="text-center">{{ lectura.b_horarias }}</td>
+                        <td class="text-center">{{ lectura.c_horarias }}</td>
+                        <td class="text-center">{{ lectura.d_horarias }}</td>
+                        <td class="text-center">{{ lectura.a_demandas }}</td>
+                        <td class="text-center">{{ lectura.b_demandas }}</td>
+                        <td class="text-center">{{ lectura.c_demandas }}</td>
+                        <td class="text-center">{{ lectura.d_demandas }}</td>
+                        <td class="text-center">{{ lectura.kvarh }}</td>
+                        <td class="text-center">{{ lectura.tipo }}</td>
+                      </tr>   
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divPerfilesDeCarga" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">Perfil de carga</h5>
+          </div>
+          <div class="card-body">
+            {{ params[0].archivo_perfil_carga_orden(class_='btn') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="divRDICO5" style="display: none">
+      <div class="col-md-12">
+        <div class="card card-user">
+          <div class="card-header">
+            <h5 class="card-title">RDICO5</h5>
+          </div>
+          <div class="card-body">
+            <h5>Acciones solicitadas</h5>
+            <h6>Cambio de materiales</h6>
+            </br>
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  <h7>Medidor: Magnitudes y parámetros</h7>
+                  <hr style="border: 1px solid #bbb;">
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].tablero_metalico_rdico5_orden }}
+                  {{ params[0].tablero_metalico_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_tablero_metalico_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                    {{ params[0].kwh_medidor_rdico5_orden }}
+                    {{ params[0].kwh_medidor_rdico5_orden.label }}     
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].kvarh_medidor_rdico5_orden }}
+                  {{ params[0].kvarh_medidor_rdico5_orden.label }} 
+                </div>
+              </div>
+
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].kW_medidor_rdico5_orden }}
+                  {{ params[0].kW_medidor_rdico5_orden.label }}
+                </div>
+              </div>
+
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].tablero_antihurto_rdico5_orden }}
+                  {{ params[0].tablero_antihurto_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_tablero_antihurto_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                      {{ params[0].perfildecarga_medidor_rdico5_orden }}
+                      {{ params[0].perfildecarga_medidor_rdico5_orden.label }}
+                </div>
+              </div>
+
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                      {{ params[0].compensacion_medidor_rdico5_orden }}
+                      {{ params[0].compensacion_medidor_rdico5_orden.label }}
+                </div>
+              </div>
+
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].cable_numero6_rdico5_orden }}
+                  {{ params[0].cable_numero6_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_cable_numero6_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_medidor_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].conductor_numero8_rdico5_orden }}
+                  {{ params[0].conductor_numero8_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_conductor_numero8_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  <h7>Acometida (Dejando visible)</h7>
+                  <hr style="border: 1px solid #bbb;">
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].protector_termico_rdico5_orden }}
+                  {{ params[0].protector_termico_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_protector_termico_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                      {{ params[0].aluminio_acometida_rdico5_orden }}
+                      {{ params[0].aluminio_acometida_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                      {{ params[0].antihurto_acometida_rdico5_orden }}
+                      {{ params[0].antihurto_acometida_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].candado_master_rdico5_orden }}
+                  {{ params[0].candado_master_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_candado_master_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  {{ params[0].subterranea_acometida_rdico5_orden }}
+                  {{ params[0].subterranea_acometida_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                </div>
+              </div>          
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].tps_rdico5_orden }}
+                  {{ params[0].tps_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_tps_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_acometida_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-2 pr-1">
+                <div class="form-group">
+                  {{ params[0].tcs_rdico5_orden }}
+                  {{ params[0].tcs_rdico5_orden.label }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].descripcion_tcs_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 pr-1">
+                <div class="form-group">
+                  {{ params[0].otros_cambio_materiales_rdico5_orden.label }}
+                  {{ params[0].otros_cambio_materiales_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+
+            </br></br>
+
+            <center><u><a onclick="activarDialog('dialogRDICO5')"><h6>(+) Característica faltante</h6></a></u></center>
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  {{ params[0].lista_acciones_rdico5_orden.label }}
+                  {{ params[0].lista_acciones_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 pr-1">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th class="text-center">Anomalia</th>
+                      <th class="text-center">Acciones</th>
+                    </thead>
+                    <tbody>
+
+                      {% for anomalia in params[0].lista_anomalias_orden %}
+                          <tr>
+                            <td class="text-center">{{ anomalia.descripcion }}</td>
+                            <td class="text-center">
+                              <div class="row">
+                                <div class="col-md-12 pr-1">
+                                  <label></label>
+                                    <i onclick="agregar_accion_anomalia('{{params[0].lista_anomalias_orden.index(anomalia)}}')" class="nc-icon nc-simple-add"></i>
+                                </div>
+                  
+                              </div>
+                  
+                              <div class="row">
+                  
+                                <div class="col-md-12 pr-1">
+                                  <div class="table-responsive">
+                                    <table class="table">
+                                      <tbody>
+                                        {% for rdico2_anomalia_accion in params[0].lista_anomalias_acciones_orden %}
+                                          {% if rdico2_anomalia_accion.anomalia_id == anomalia.id %}
+                                            <tr>
+                                              <td class="text-center">{{ rdico2_anomalia_accion.accion_descripcion }}</td>
+                                                <td class="text-center"><i onclick="eliminar_row_anomalia_accion('{{ anomalia.id }}', '{{ rdico2_anomalia_accion.accion_id }}','boton_eliminar_accion_rdico5_orden')" class="nc-icon nc-simple-remove"></i></td>
+                                              </tr>   
+                                          {% endif %}
+                                        {% endfor %}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>   
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  {{ params[0].control_medicion_rdico5_orden.label }}
+                  {{ params[0].control_medicion_rdico5_orden(class_='form-control') }}
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  <label>Fecha</label>
+                  <input id="fecha_rdico5_orden" type="date" name="fecha_rdico5_orden" class="form-control">
+                </div>
+              </div>
+            </div>
+            {{ params[0].boton_agregar_accion_rdico5(class_='ocultar-boton') }}
+            {{ params[0].boton_eliminar_accion_rdico5_orden(class_='ocultar-boton') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dialogos para creaciones de caracteristicas -->
+    <dialog id="dialogResultados" style="border: none;">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    {{ params[0].tipo_faltante_resultados_orden.label }}
+                    
+                  </div>
+                </div>
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    {{ params[0].tipo_faltante_resultados_orden(class_='form-control') }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <div class="form-group">
+                    {{ params[0].nombre_faltante_resultados_orden(class_='form-control') }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <center>
+                    {{ params[0].boton_crear_faltante_resultados_orden(class_='btn') }}
+                    <button id="cancelar_dialog_resultados" type="reset" class="btn">Cancelar</button>
+                  </center>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="dialogRDICO5" style="border: none;">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <div class="form-group">
+                    {{ params[0].tipo_faltante_rdico5_orden.label }}
+                  </div>
+                </div>
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    {{ params[0].tipo_faltante_rdico5_orden(class_='form-control') }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <div class="form-group">
+                    {{ params[0].nombre_faltante_rdico5_orden(class_='form-control') }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <center>
+                    {{ params[0].boton_crear_faltante_rdico5_orden(class_='btn') }}
+                    <button id="cancelar_dialog_rdico5" type="reset" class="btn">Cancelar</button>
+                  </center>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="dialogCancelar" style="border: none;">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card-body">
+
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <h3>Atencion</h3>
+                  <label>¿Esta seguro que desea cancelar los cambios realizados en esta orden?</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <center>
+                    {{ params[0].cancelar_administrar(class_="btn btn-primary btn-round") }}
+                    <button id="cancelar_dialog_cancelar" type="reset" class="btn btn round">Cancelar</button>
+                  </center>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="dialogRevision" style="border: none;">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <h3>Atencion</h3>
+                  <label>¿Esta seguro que desea enviar esta orden <p>de regreso a revisión?</p></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pr-1">
+                  <center>
+                    {{ params[0].volver_revision(class_="btn btn-danger btn-round") }}
+                    <button id="cancelar_dialog_revision" type="reset" class="btn btn-round">Cancelar</button>
+                  </center>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="dialogCerrarSAP" style="border: none;">
+        <div class="row">
+          <div class="col-md-12">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12 pr-1">
+                    <h3>Atencion</h3>
+                    <label>¿Esta seguro que desea cerrar esta orden en SAP?</p></label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 pr-1">
+                    <center>
+                      {{ params[0].cerrar_sap(class_="btn btn-danger btn-round") }}
+                      <button id="cancelar_dialog_cierre" type="reset" class="btn btn-round">Cancelar</button>
+                    </center>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </dialog>
+
+
+
+
+
+    <input id="input_index_eliminar" name="input_index_eliminar" type="hidden" value="-1">
+    <input id="input_index_anomalia" name="input_index_anomalia" type="hidden" value="">
+    <input id="input_index_accion" name="input_index_accion" type="hidden" value="">
+
+  </form>
+</div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+
+  function activarDiv(div) {
+    document.getElementById("divOrden").style.display = "none"
+    document.getElementById("divInstalacion").style.display = "none"
+    document.getElementById("divCliente").style.display = "none"
+    document.getElementById("divMedidor").style.display = "none"
+    document.getElementById("divParametrizacion").style.display = "none"
+    document.getElementById("divTransformadorMedida").style.display = "none"
+    document.getElementById("divTransformadorDistribucion").style.display = "none"
+    document.getElementById("divPruebas").style.display = "none"
+    document.getElementById("divVerificaciones").style.display = "none"
+    document.getElementById("divSellos").style.display = "none"
+    document.getElementById("divResultados").style.display = "none"
+    document.getElementById("divFotografias").style.display = "none"
+    document.getElementById("divLecturas").style.display = "none"
+    document.getElementById("divPerfilesDeCarga").style.display = "none"
+    document.getElementById("divRDICO5").style.display = "none"
+
+
+
+    document.getElementById(div).style.display = "block"
+
+  }
+
+  function activarDivs(list_divs) {
+    document.getElementById("divOrden").style.display = "none"
+    document.getElementById("divInstalacion").style.display = "none"
+    document.getElementById("divCliente").style.display = "none"
+    document.getElementById("divMedidor").style.display = "none"
+    document.getElementById("divParametrizacion").style.display = "none"
+    document.getElementById("divTransformadorMedida").style.display = "none"
+    document.getElementById("divTransformadorDistribucion").style.display = "none"
+    document.getElementById("divPruebas").style.display = "none"
+    document.getElementById("divVerificaciones").style.display = "none"
+    document.getElementById("divSellos").style.display = "none"
+    document.getElementById("divResultados").style.display = "none"
+    document.getElementById("divFotografias").style.display = "none"
+    document.getElementById("divLecturas").style.display = "none"
+    document.getElementById("divPerfilesDeCarga").style.display = "none"
+    document.getElementById("divRDICO5").style.display = "none"
+
+
+    var arrayLength = list_divs.length;
+    for (var i = 0; i < arrayLength; i++) {
+        document.getElementById(list_divs[i]).style.display = "block"
+    }
+  }
+
+
+  $(document).ready(function () {
+    var bandera = '{{ params[5] }}'
+    if(bandera == "True"){
+      desactivar_rdico5();
+    }
+    init_fechas();
+    init_consumos();
+    init_demandas();
+    init_reactivos();
+    activarDiv('{{divActual}}')
+    activarDialog('{{dialogActual}}')
+    // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
+    
+  });
+
+  function desactivar_rdico5(){
+
+  }
+
+  function init_fechas(){
+    var now = new Date();
+
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+    $('#fecha_resultados_orden').val(today);
+    $('#fecha_rdico5_orden').val(today);
+  }
+
+  function actualizar_relacion_transformacion_tcs_R() {
+    if(document.getElementById('tcs_i_secundario_r_verificaciones_orden').value > 0 && document.getElementById('tcs_i_primario_r_verificaciones_orden').value > 0){
+      document.getElementById('relacion_transformacion_i_r_verificaciones_orden').value =  document.getElementById('tcs_i_primario_r_verificaciones_orden').value /  document.getElementById('tcs_i_secundario_r_verificaciones_orden').value
+    }else{
+      document.getElementById('relacion_transformacion_i_r_verificaciones_orden').value =  ""
+    }
+  }
+
+  function actualizar_relacion_transformacion_tcs_S() {
+    if(document.getElementById('tcs_i_secundario_s_verificaciones_orden').value > 0 && document.getElementById('tcs_i_primario_s_verificaciones_orden').value > 0){
+      document.getElementById('relacion_transformacion_i_s_verificaciones_orden').value =  document.getElementById('tcs_i_primario_s_verificaciones_orden').value /  document.getElementById('tcs_i_secundario_s_verificaciones_orden').value
+    }else{
+      document.getElementById('relacion_transformacion_i_s_verificaciones_orden').value =  ""
+    }
+  }
+
+  function actualizar_relacion_transformacion_tcs_T() {
+    if(document.getElementById('tcs_i_secundario_t_verificaciones_orden').value > 0 && document.getElementById('tcs_i_primario_t_verificaciones_orden').value > 0){
+      document.getElementById('relacion_transformacion_i_t_verificaciones_orden').value =  document.getElementById('tcs_i_primario_t_verificaciones_orden').value /  document.getElementById('tcs_i_secundario_t_verificaciones_orden').value
+    }else{relacion_transformacion_i_t_verificaciones_orden
+      document.getElementById('relacion_transformacion_i_t_verificaciones_orden').value =  ""
+    }
+  }
+
+  function actualizar_relacion_transformacion_tps_R() {
+    if(document.getElementById('tps_v_secundario_r_verificaciones_orden').value > 0 && document.getElementById('relacion_transformacion_v_r_verificaciones_orden').value > 0){
+      document.getElementById('tps_v_primario_r_verificaciones_orden').value =  document.getElementById('tps_v_secundario_r_verificaciones_orden').value *  document.getElementById('relacion_transformacion_v_r_verificaciones_orden').value
+    }else{
+      document.getElementById('tps_v_primario_r_verificaciones_orden').value =  ""
+    }
+  }
+
+  function actualizar_relacion_transformacion_tps_S() {
+    if(document.getElementById('tps_v_secundario_s_verificaciones_orden').value > 0 && document.getElementById('relacion_transformacion_v_s_verificaciones_orden').value > 0){
+      document.getElementById('tps_v_primario_s_verificaciones_orden').value =  document.getElementById('tps_v_secundario_s_verificaciones_orden').value *  document.getElementById('relacion_transformacion_v_s_verificaciones_orden').value
+    }else{
+      document.getElementById('tps_v_primario_s_verificaciones_orden').value =  ""
+    }
+  }
+
+  function actualizar_relacion_transformacion_tps_T() {
+    if(document.getElementById('tps_v_secundario_t_verificaciones_orden').value > 0 && document.getElementById('relacion_transformacion_v_t_verificaciones_orden').value > 0){
+      document.getElementById('tps_v_primario_t_verificaciones_orden').value =  document.getElementById('tps_v_secundario_t_verificaciones_orden').value *  document.getElementById('relacion_transformacion_v_t_verificaciones_orden').value
+    }else{relacion_transformacion_i_t_verificaciones_orden
+      document.getElementById('tps_v_primario_t_verificaciones_orden').value =  ""
+    }
+  }
+
+
+
+  function init_consumos() {
+
+    chartColor = "#FFFFFF";
+
+    ctx = document.getElementById('chart_consumos').getContext("2d");
+
+    myChart = new Chart(ctx, {
+      type: 'bar',
+
+      data: {
+        labels: ['{{ params[1][0] }}', '{{ params[1][1] }}', '{{ params[1][2] }}', '{{ params[1][3] }}',
+          '{{ params[1][4] }}', '{{ params[1][5] }}', '{{ params[1][6] }}', '{{ params[1][7] }}',
+          '{{ params[1][8] }}', '{{ params[1][9] }}', '{{ params[1][10] }}', '{{ params[1][11] }}'],
+        datasets: [{
+          label: "Consumo",
+          borderColor: 'rgba(54, 162, 235, 0.5)',
+          backgroundColor: 'rgba(205, 235, 255, 0.5)',
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          borderWidth: 3,
+          data: ['{{ params[2][0] }}', '{{ params[2][1] }}', '{{ params[2][2] }}', '{{ params[2][3] }}',
+            '{{ params[2][4] }}', '{{ params[2][5] }}', '{{ params[2][6] }}', '{{ params[2][7] }}',
+            '{{ params[2][8] }}', '{{ params[2][9] }}', '{{ params[2][10] }}', '{{ params[2][11] }}']
+        }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        },
+
+        scales: {
+          yAxes: [{
+
+            ticks: {
+              fontColor: "#9f9f9f",
+              beginAtZero: true,
+              maxTicksLimit: 5,
+            },
+            gridLines: {
+              drawBorder: false,
+              zeroLineColor: "#ccc",
+              color: 'rgba(255,255,255,0.05)'
+            }
+
+          }],
+
+          xAxes: [{
+            gridLines: {
+              drawBorder: false,
+              color: 'rgba(255,255,255,0.1)',
+              zeroLineColor: "transparent",
+              display: false,
+            },
+            ticks: {
+              padding: 20,
+              fontColor: "#9f9f9f"
+            }
+          }]
+        },
+      }
+    });
+  }
+
+  function init_demandas() {
+
+    chartColor = "#FFFFFF";
+
+    ctx = document.getElementById('chart_demandas').getContext("2d");
+
+    myChart = new Chart(ctx, {
+      type: 'bar',
+
+      data: {
+        labels: ['{{ params[1][0] }}', '{{ params[1][1] }}', '{{ params[1][2] }}', '{{ params[1][3] }}',
+          '{{ params[1][4] }}', '{{ params[1][5] }}', '{{ params[1][6] }}', '{{ params[1][7] }}',
+          '{{ params[1][8] }}', '{{ params[1][9] }}', '{{ params[1][10] }}', '{{ params[1][11] }}'],
+        datasets: [{
+          label: "Demanda",
+          borderColor: 'rgba(255, 194, 52, 0.5)',
+          backgroundColor: 'rgba(255,243,214, 0.5)',
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          borderWidth: 3,
+          data: ['{{ params[3][0] }}', '{{ params[3][1] }}', '{{ params[3][2] }}', '{{ params[3][3] }}',
+            '{{ params[3][4] }}', '{{ params[3][5] }}', '{{ params[3][6] }}', '{{ params[3][7] }}',
+            '{{ params[3][8] }}', '{{ params[3][9] }}', '{{ params[3][10] }}', '{{ params[3][11] }}']
+        }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        },
+
+        scales: {
+          yAxes: [{
+
+            ticks: {
+              fontColor: "#9f9f9f",
+              beginAtZero: true,
+              maxTicksLimit: 5,
+            },
+            gridLines: {
+              drawBorder: false,
+              zeroLineColor: "#ccc",
+              color: 'rgba(255,255,255,0.05)'
+            }
+
+          }],
+
+          xAxes: [{
+            gridLines: {
+              drawBorder: false,
+              color: 'rgba(255,255,255,0.1)',
+              zeroLineColor: "transparent",
+              display: false,
+            },
+            ticks: {
+              padding: 20,
+              fontColor: "#9f9f9f"
+            }
+          }]
+        },
+      }
+    });
+  }
+
+
+  function init_reactivos() {
+
+    chartColor = "#FFFFFF";
+
+    ctx = document.getElementById('chart_reactivos').getContext("2d");
+
+    myChart = new Chart(ctx, {
+      type: 'bar',
+
+      data: {
+        labels: ['{{ params[1][0] }}', '{{ params[1][1] }}', '{{ params[1][2] }}', '{{ params[1][3] }}',
+          '{{ params[1][4] }}', '{{ params[1][5] }}', '{{ params[1][6] }}', '{{ params[1][7] }}',
+          '{{ params[1][8] }}', '{{ params[1][9] }}', '{{ params[1][10] }}', '{{ params[1][11] }}'],
+        datasets: [{
+          label: "Reactivo",
+          borderColor: 'rgba(255, 112, 143, 0.5)',
+          backgroundColor: 'rgba(255, 217, 225, 0.5)',
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          borderWidth: 3,
+          data: ['{{ params[4][0] }}', '{{ params[4][1] }}', '{{ params[4][2] }}', '{{ params[4][3] }}',
+            '{{ params[4][4] }}', '{{ params[4][5] }}', '{{ params[4][6] }}', '{{ params[4][7] }}',
+            '{{ params[4][8] }}', '{{ params[4][9] }}', '{{ params[4][10] }}', '{{ params[4][11] }}']
+        }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        },
+
+        scales: {
+          yAxes: [{
+
+            ticks: {
+              fontColor: "#9f9f9f",
+              beginAtZero: true,
+              maxTicksLimit: 5,
+            },
+            gridLines: {
+              drawBorder: false,
+              zeroLineColor: "#ccc",
+              color: 'rgba(255,255,255,0.05)'
+            }
+
+          }],
+
+          xAxes: [{
+            gridLines: {
+              drawBorder: false,
+              color: 'rgba(255,255,255,0.1)',
+              zeroLineColor: "transparent",
+              display: false,
+            },
+            ticks: {
+              padding: 20,
+              fontColor: "#9f9f9f"
+            }
+          }]
+        },
+      }
+    });
+  }
+
+  
+
+  function showNotification(from, align) {
+    color = 'primary';
+
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: "Cambios guardados <b>correctamente</b>"
+
+    }, {
+      type: color,
+      timer: 1000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
+  }
+
+  function cambiar_choices_medidor() {
+    document.getElementById("boton_cambio_marca_orden").click();
+  }
+
+  function cambiar_choices_accion() {
+    document.getElementById("boton_cambio_accion_rdico5_orden").click();
+  }
+
+  function cambiar_choices_transformador_medida(){
+    document.getElementById("boton_cambio_marca_transformador_medida_orden").click();
+  }
+
+
+  function activarDialog(id_dialog){
+    var dialog = document.getElementById(id_dialog);
+
+    dialog.showModal();
+
+  }
+
+  function activarBoton(boton){
+    document.getElementById(boton).click();
+  }
+
+  function eliminar_row_tabla(index, boton){
+    document.getElementById("input_index_eliminar").value = index;
+    document.getElementById(boton).click();
+  }
+
+  function eliminar_row_anomalia_accion(anomalia, accion, boton){
+    document.getElementById("input_index_anomalia").value = anomalia;
+    document.getElementById("input_index_accion").value = accion;
+    document.getElementById(boton).click();
+  }
+
+  function agregar_accion_anomalia(index){
+    document.getElementById("input_index_anomalia").value = index;
+    document.getElementById('boton_agregar_accion_rdico5').click();
+  }
+
+  
+
+  (function() {
+    var dialogResultados = document.getElementById("dialogResultados");
+    var dialogCancelar = document.getElementById("dialogCancelar");
+    var dialogRevision = document.getElementById("dialogRevision");
+    var dialogRDICO5 = document.getElementById("dialogRDICO5");
+    var dialogCerrarSap = document.getElementById("dialogCerrarSap");
+
+    var cancelar_dialog_resultados = document.getElementById('cancelar_dialog_resultados');
+    var cancelar_dialog_cancelar= document.getElementById('cancelar_dialog_cancelar');
+    var cancelar_dialog_revision = document.getElementById('cancelar_dialog_revision');
+    var cancelar_dialog_rdico5= document.getElementById('cancelar_dialog_rdico5');
+    var cancelar_dialog_cierre= document.getElementById('cancelar_dialog_cierre');
+    
+    cancelar_dialog_resultados.addEventListener('click', function() {
+      dialogResultados.close();
+    });
+    cancelar_dialog_cancelar.addEventListener('click', function() {
+      dialogCancelar.close();
+    });
+    cancelar_dialog_revision.addEventListener('click', function() {
+      dialogRevision.close();
+    });
+    cancelar_dialog_rdico5.addEventListener('click', function() {
+      dialogRDICO5.close();
+    });
+    cancelar_dialog_cierre.addEventListener('click', function() {
+      dialogCerrarSap.close();
+    });    
+
+  })();
+
+
+</script>
+
+{% endblock javascripts %}

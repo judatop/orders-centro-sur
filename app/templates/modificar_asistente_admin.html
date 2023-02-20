@@ -1,0 +1,94 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Google Maps {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- End Navbar -->
+    <div class="content">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+
+              {% if category == "exito" %}
+                <div class="alert alert-success alert-dismissible fade show">
+                  <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                  <span><b>Correcto: </b>{{ message }}</span>
+                </div>
+              {% endif %}
+
+              {% if category == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                  <button type="button" aria-hidden="true"  class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                  <span><b>Error: </b>{{ message }}</span>
+                </div>
+              {% endif %}
+
+              {% if category == "advertencia" %}
+                <div class="alert alert-warning alert-dismissible fade show">
+                  <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                  <span><b>Advertencia: </b> {{ message }}</span>
+                </div>
+              {% endif %}
+
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+
+      <div class="row" id="divModificarAsistenteAdmin" style="display:block">
+        <div class="col-md-12">
+            <div class="card card-user">
+
+              <div class="card-header">
+                <h5 class="card-title">Modificando asistente administrador</h5>
+              </div>
+
+              <div class="card-body">
+
+                <form method="post" enctype="multipart/form-data">
+                  {{ params[0].hidden_tag() }}
+
+                  <div class="row">
+                      <div class="col-md-4 pr-1">
+                        <div class="form-group">
+                          {{ params[0].nombre_modificar.label }}
+                          {{ params[00].nombre_modificar(class_='form-control') }}
+                        </div>
+                      </div>
+                      <div class="col-md-4 pr-1">
+                        <div class="form-group">
+                          {{ params[0].usuario_modificar.label }}
+                          {{ params[0].usuario_modificar(class_='form-control') }}
+                        </div>
+                      </div>
+                  </div>
+
+                  </br>
+                  {{ params[0].modificar(class_='btn btn-primary') }}
+                  {{ params[0].cancelar_modificar(class_='btn') }}
+                </form>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}    
+
+
+
+{% endblock javascripts %}

@@ -1,0 +1,125 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} User Profile {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="content">
+    <form method="post">
+      {{ params[1].hidden_tag() }}
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+
+            {% if category == "exito" %}
+              <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                  <i class="nc-icon nc-simple-remove"></i>
+                </button>
+                <span><b>Correcto: </b>{{ message }}</span>
+              </div>
+            {% endif %}
+
+            {% if category == "error" %}
+              <div class="alert alert-danger alert-dismissible fade show">
+                <button type="button" aria-hidden="true"  class="close" data-dismiss="alert" aria-label="Close">
+                  <i class="nc-icon nc-simple-remove"></i>
+                </button>
+                <span><b>Error: </b>{{ message }}</span>
+              </div>
+            {% endif %}
+
+            {% if category == "advertencia" %}
+              <div class="alert alert-warning alert-dismissible fade show">
+                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                  <i class="nc-icon nc-simple-remove"></i>
+                </button>
+                <span><b>Advertencia: </b> {{ message }}</span>
+              </div>
+            {% endif %}
+
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <div class="row">
+        <div class="col-md-12">
+          <center>
+            {{ params[1].realizar_orden(class_="btn btn-success") }}
+            {{ params[1].ver_ordenes(class_="btn") }}
+            {{ params[1].generar_kml(class_="btn") }}
+        </center>
+        </div>
+      </div>
+
+      <div class="row" id="divTablaOrdenes">
+
+        <h5>Órdenes</h5>
+
+        <div class="table-responsive">
+                <table id="data" class="table">
+                  <thead class=" text-primary">
+                    <th class="text-center">Número</th>
+                    <th class="text-center">Instalación</th>
+                    <th class="text-center">Medidor</th>
+                    <th class="text-center"></th>
+                  </thead>
+                  <tbody>
+                  {% for orden in params[0] %}
+                    {% if orden.fechaEjecucion  %}
+                      <tr onclick="cambiarColorRow(this, '{{ orden.numeroOrden }}')" style="background-color: #83DE83;">
+                        <td class="text-center">{{ orden.numeroOrden }}</td>
+                        <td class="text-center">{{ orden.instalacion }}</td>
+                        <td class="text-center">{{ orden.medidor }}</td>
+                        <td class="text-center"><b style="color: black; font-size: 20px;">EN DESARROLLO</b></td>
+                      </tr>
+                    {% else %}  
+                      <tr onclick="cambiarColorRow(this, '{{ orden.numeroOrden }}')">
+                        <td class="text-center">{{ orden.numeroOrden }}</td>
+                        <td class="text-center">{{ orden.instalacion }}</td>
+                        <td class="text-center">{{ orden.medidor }}</td>
+                        <td class="text-center"></td>
+                      </tr>
+                    {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+        </div>
+
+      </div>
+
+      <input id="input_numero_orden" name="input_numero_orden" type="hidden" value="0">
+
+    </form>
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function () {
+      $('#data').DataTable();
+    });
+</script>
+
+<script>
+  function cambiarColorRow(o, numero_orden){
+    var table = document.getElementById("data");
+    var rows = table.getElementsByTagName("tr") ;
+    for (var i=0; i<rows.length; i++) {
+        rows[i].style.backgroundColor = "white";
+    }
+
+    document.getElementById('input_numero_orden').value = numero_orden
+    o.style.backgroundColor='#78CBCE';
+
+  }
+</script>
+
+{% endblock javascripts %}

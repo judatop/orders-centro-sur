@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="1">
+        <Schema name="Coordenadas" id="2">
+            <SimpleField type="string" name="Name"/>
+            <SimpleField type="string" name="Description"/>
+            <SimpleField type="float" name="Coord. X (UTM)"/>
+            <SimpleField type="float" name="Coord. Y (UTM)"/>
+        </Schema>
+        <Folder id="7">
+            <name>Coordenadas</name>
+            <Placemark id="9">
+                <name>16895984</name>
+                <description>17548451</description>
+                <ExtendedData>
+                    <SchemaData schemaUrl="#Coordenadas">
+                        <SimpleData name="Coord. X (UTM)">684841.5669000000</SimpleData>
+                        <SimpleData name="Coord. Y (UTM)">9732144.1660000000</SimpleData>
+                    </SchemaData>
+                </ExtendedData>
+                <Point id="8">
+                    <coordinates>-2.4223356950,-79.3376338000,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="15">
+                <name>16895986</name>
+                <description>16948966</description>
+                <ExtendedData>
+                    <SchemaData schemaUrl="#Coordenadas">
+                        <SimpleData name="Coord. X (UTM)">684584.4430000000</SimpleData>
+                        <SimpleData name="Coord. Y (UTM)">9732003.4170000000</SimpleData>
+                    </SchemaData>
+                </ExtendedData>
+                <Point id="14">
+                    <coordinates>-2.4236113830,-79.3399440300,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="21">
+                <name>16901629</name>
+                <description>4914472</description>
+                <ExtendedData>
+                    <SchemaData schemaUrl="#Coordenadas">
+                        <SimpleData name="Coord. X (UTM)">745835.4654000000</SimpleData>
+                        <SimpleData name="Coord. Y (UTM)">9677503.1890000000</SimpleData>
+                    </SchemaData>
+                </ExtendedData>
+                <Point id="20">
+                    <coordinates>-2.9155204270,-78.7884447600,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="27">
+                <name>16903767</name>
+                <description>1903075800000</description>
+                <ExtendedData>
+                    <SchemaData schemaUrl="#Coordenadas">
+                        <SimpleData name="Coord. X (UTM)">724778.2624000000</SimpleData>
+                        <SimpleData name="Coord. Y (UTM)">9682001.9410000000</SimpleData>
+                    </SchemaData>
+                </ExtendedData>
+                <Point id="26">
+                    <coordinates>-2.8752033070,-78.9778660700,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="33">
+                <name>16933232</name>
+                <description>520232454</description>
+                <ExtendedData>
+                    <SchemaData schemaUrl="#Coordenadas">
+                        <SimpleData name="Coord. X (UTM)">721807.8246000000</SimpleData>
+                        <SimpleData name="Coord. Y (UTM)">9678698.1420000000</SimpleData>
+                    </SchemaData>
+                </ExtendedData>
+                <Point id="32">
+                    <coordinates>-2.9051220590,-79.0045253300,0.0</coordinates>
+                </Point>
+            </Placemark>
+        </Folder>
+    </Document>
+</kml>

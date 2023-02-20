@@ -1,0 +1,15 @@
+folium
+flask_jsglue
+flask~=2.0.2
+flask-login~=0.5.0
+flask-wtf~=1.0.0
+WTForms~=3.0.0
+Werkzeug~=2.0.2
+gunicorn==20.0.4
+jinja2~=3.0.3
+peewee~=3.14.8
+SQLAlchemy~=1.4.27
+pymysql~=1.0.2
+pandas
+openpyxl~=3.0.9
+simplekml

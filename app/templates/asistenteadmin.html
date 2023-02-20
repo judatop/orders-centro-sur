@@ -1,0 +1,120 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- End Navbar -->
+    <div class="content">
+      <form method="post">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+
+              {% if category == "exito" %}
+                <div class="alert alert-success alert-dismissible fade show">
+                  <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                  <span><b>Correcto: </b>{{ message }}</span>
+                </div>
+              {% endif %}
+
+              {% if category == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                  <button type="button" aria-hidden="true"  class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                  <span><b>Error: </b>{{ message }}</span>
+                </div>
+              {% endif %}
+
+              {% if category == "advertencia" %}
+                <div class="alert alert-warning alert-dismissible fade show">
+                  <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                  <span><b>Advertencia: </b> {{ message }}</span>
+                </div>
+              {% endif %}
+
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="row">
+          <div class="col-md-12">
+            <center>
+              {{ params[1].crear(class_="btn") }}
+              {{ params[1].modificar(class_="btn") }}
+          </center>
+          </div>
+        </div>
+
+        <div class="row" id="divAsistentesAdministradores" style="display:block">
+          <div class="col-md-12">
+            <div class="card card-user">
+
+              <div class="card-header">
+                <h5 class="card-title">Asistentes Administrativos creados</h5>
+              </div>
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="table-responsive">
+                    <table id="data" class="table">
+                      <thead class=" text-primary">
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Usuario</th>
+                      </thead>
+                      <tbody>
+                        {% for asistente in params[0] %}
+                          <tr onclick="cambiarColorRow(this, '{{ asistente.id }}')">
+                            <td class="text-center">{{ asistente.nombre }}</td>
+                            <td class="text-center">{{ asistente.usuario }}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <input id="input_asistente_administrativo_modificar" name="input_asistente_administrativo_modificar" type="hidden" value="0">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+</script>
+
+<script>
+  function cambiarColorRow(o, asistente_administrativo){
+    var table = document.getElementById("data");
+    var rows = table.getElementsByTagName("tr") ;
+    for (var i=0; i<rows.length; i++) {
+        rows[i].style.backgroundColor = "white";
+    }
+
+    document.getElementById('input_asistente_administrativo_modificar').value = asistente_administrativo
+    o.style.backgroundColor='#78CBCE';
+
+  }
+</script>
+
+
+{% endblock javascripts %}
